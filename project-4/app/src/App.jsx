@@ -1,63 +1,103 @@
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import SearchResult from "./components/SearchResults/SearchResult";
+import  { useEffect, useState } from 'react'
+import styled from "styled-components"
+import SearchResult from './components/SearchResults/SearchResult';
 
-export const BASE_URL = "http://localhost:9000";
 
+
+ export const BASE_URL= "http://localhost:9000";
 const App = () => {
-  const [data, setData] = useState(null);
-  const [filteredData, setFilteredData] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [selectedBtn, setSelectedBtn] = useState("all");
+  const[data, setData]= useState(null);
+  const [loading, setLoading]= useState(false)
+  const[error, setError]= useState(null);
 
-  useEffect(() => {
-    const fetchFoodData = async () => {
-      setLoading(true);
+  const[filterData, setFilterData]= useState(null)
 
-      try {
-        const response = await fetch(BASE_URL);
+  const[selectedBtn, setSelectedBtn]= useState("all")
 
-        const json = await response.json();
 
-        setData(json);
-        setFilteredData(json);
-        setLoading(false);
-      } catch (error) {
-        setError("Unable to fetch data");
+
+// Too many renders error will be show like this ******
+// **********
+
+  // const FetchFoodData= async()=>{
+  //   setLoading(true)
+  //   try{
+  //   const response= await fetch(BASE_URL);
+
+  //   const get =  await response.json();
+  //   console.log(get)
+  //   setData(get)
+  //   setLoading(false)
+  //   }catch(error){
+  //     setError("unable to fetch data")
+
+  //   }
+  // }
+
+
+  // FetchFoodData();
+
+
+
+  useEffect(()=>{
+
+    const FetchFoodData= async()=>{
+      setLoading(true)
+      try{
+      const response= await fetch(BASE_URL);
+  
+      const get =  await response.json();
+      console.log(get)
+      setData(get)
+      setFilterData(get)
+      setLoading(false)
+      }catch(error){
+        setError("unable to fetch data")
+  
       }
-    };
-    fetchFoodData();
-  }, []);
+    }
+  
+  
+    FetchFoodData();
 
-  const searchFood = (e) => {
-    const searchValue = e.target.value;
+  },[])
 
-    console.log(searchValue);
 
-    if (searchValue === "") {
-      setFilteredData(null);
+
+
+  const searchFood=(e)=>{
+    const searchValue= e.target.value;
+    // console.log(searchValue)
+    if(SearchResult===""){
+      setFilterData(null);
+
     }
 
-    const filter = data?.filter((food) =>
-      food.name.toLowerCase().includes(searchValue.toLowerCase())
-    );
-    setFilteredData(filter);
-  };
+  
 
-  const filterFood = (type) => {
-    if (type === "all") {
-      setFilteredData(data);
-      setSelectedBtn("all");
-      return;
+  const filter= data?.filter((food)=>
+  food.name.toLowerCase().includes(searchValue.toLowerCase())
+
+  )
+  setFilterData(filter)
+  }
+
+
+  const filterFood=(type)=>{
+    if(type==="all"){
+      setFilterData(data)
+      setSelectedBtn("all")
+      return ;
     }
-
     const filter = data?.filter((food) =>
       food.type.toLowerCase().includes(type.toLowerCase())
     );
-    setFilteredData(filter);
+    setFilterData(filter);
     setSelectedBtn(type);
-  };
+  
+
+  }
+
 
   const filterBtns = [
     {
@@ -78,89 +118,128 @@ const App = () => {
     },
   ];
 
-  if (error) return <div>{error}</div>;
-  if (loading) return <div>loading.....</div>;
+
+  
+
+  if(error) return <div>{error}</div>
+  if(loading) return <div>loading.....</div>
+
 
   return (
     <>
-      <Container>
-        <TopContainer>
-          <div className="logo">
-            <img src="/logo.svg" alt="logo" />
-          </div>
+    <Container>
+      <TopContainer>
+        <div className="logo">
+          <img src="./logo.svg" alt="logo" />
+        </div>
 
-          <div className="search">
-            <input onChange={searchFood} placeholder="Search Food" />
-          </div>
-        </TopContainer>
+        <div className="search">
+          <input onChange={searchFood} placeholder="Search food" />
+        </div>
 
-        <FilterContainer>
-          {filterBtns.map((value) => (
+
+
+      </TopContainer>
+
+      <FilterContainer>
+        {/* without map */}
+        {/* /* <Button onclick={()=>filterFOod("all")}>All</Button> */}
+        {/* {/* <Button onclick={()=>filterFOod("breakfast")}>All</Button> */}
+        {/* {/* <Button onclick={()=>filterFOod("lunch")}>All</Button> */}
+        {/* {/* <Button onclick={()=>filterFOod("dinner")}>All</Button> */}
+        
+
+{filterBtns.map((value) => (
             <Button
-              isSelected={selectedBtn === value.type}
+            isSelected={selectedBtn === value.type}
               key={value.name}
               onClick={() => filterFood(value.type)}
             >
               {value.name}
             </Button>
           ))}
-        </FilterContainer>
-      </Container>
-      <SearchResult data={filteredData} />
+
+      </FilterContainer>
+
+
+      
+
+      
+    </Container>
+      <SearchResult  data={filterData}/>
+    
     </>
-  );
-};
+  )
+  
+}
 
-export default App;
+export default App
 
-export const Container = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-`;
-const TopContainer = styled.section`
-  height: 140px;
-  display: flex;
-  justify-content: space-between;
-  padding: 16px;
-  align-items: center;
+  export const Container=styled.div`
+max-width: 1200px;
+margin: 0 auto;
 
-  .search {
-    input {
-      background-color: transparent;
-      border: 1px solid red;
+  `
+
+const TopContainer= styled.section`
+min-height: 140px;
+display: flex;
+justify-content: space-between;
+padding: 16px;
+align-items: center;
+
+
+.search{
+  input{
+    background-color: transparent;
+    border: 1px solid red;
+    color: white;
+    border-radius: 5px;
+    height: 40px;
+    font-size: 16px;
+    padding:  0 10px;
+
+    &::placeholder{
       color: white;
-      border-radius: 5px;
-      height: 40px;
-      font-size: 16px;
-      padding: 0 10px;
-      &::placeholder {
-        color: white;
-      }
+
     }
   }
+}
 
-  @media (0 < width < 600px) {
-    flex-direction: column;
-    height: 120px;
-  }
-`;
+@media  (0<width<600px){
+  flex-direction: column;
+  height: 120px;
 
-const FilterContainer = styled.section`
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  padding-bottom: 40px;
-`;
 
-export const Button = styled.button`
-  background: ${({ isSelected }) => (isSelected ? "#f22f2f" : "#ff4343")};
+}
+    
+  `
+  
+const FilterContainer= styled.section`
+display: flex;
+justify-content: center;
+gap: 12px;
+padding-bottom: 50px;
+  
+
+`  
+
+ export const Button = styled.button`
+background: #ff4343;
+border-radius: 5px;
+padding: 6px 12px;
+border: none;
+color: white;
+cursor: pointer;
+background: ${({ isSelected }) => (isSelected ? "#f22f2f" : "#ff4343")};
   outline: 1px solid ${({ isSelected }) => (isSelected ? "white" : "#ff4343")};
-  border-radius: 5px;
-  padding: 6px 12px;
-  border: none;
-  color: white;
-  cursor: pointer;
-  &:hover {
-    background-color: #f22f2f;
-  }
-`;
+
+&:hover{
+  background-color: #c05353;
+
+}
+
+  
+
+`
+

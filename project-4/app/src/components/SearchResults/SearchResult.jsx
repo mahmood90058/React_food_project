@@ -1,49 +1,78 @@
-import styled from "styled-components";
-import { BASE_URL, Button, Container } from "../../App";
-const SearchResult = ({ data }) => {
+import styled from "styled-components"
+import { BASE_URL, Container } from "../../App"
+import { Button } from "../../App"
+const SearchResult = ({data}) => {
   return (
-    <FoodCardContainer>
-      <Container>
-        <FoodCards>
-          {data?.map(({ name, image, text, price }) => (
+    <div>
+      <FoodCardContainer>
+       <Container>
+       <FoodCards>
+          {
+            // optional channing using ?
+            // isko nhi lagate hai toh "error ata hai "
+            data?.map(({name,image,text,price})=>(
             <FoodCard key={name}>
+              {/* {food.text} */}
               <div className="food_image">
-                <img src={BASE_URL + image} />
+                <img src={BASE_URL +image} alt="img" />
               </div>
+
               <div className="food_info">
                 <div className="info">
                   <h3>{name}</h3>
                   <p>{text}</p>
-                </div>
-                <Button>${price.toFixed(2)}</Button>
-              </div>
-            </FoodCard>
-          ))}
-        </FoodCards>
-      </Container>
-    </FoodCardContainer>
-  );
-};
 
-export default SearchResult;
-const FoodCardContainer = styled.section`
-  min-height: calc(100vh - 210px);
-  background-image: url("/bg.png");
-  background-size: cover;
-`;
-const FoodCards = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  row-gap: 32px;
-  column-gap: 20px;
-  justify-content: center;
-  align-items: center;
-  padding-top: 80px;
-`;
-const FoodCard = styled.div`
-  width: 340px;
+                </div>
+              <Button>${price.toFixed(2)}</Button>
+              </div>
+
+              
+
+            </FoodCard>
+            ))}
+      
+
+        </FoodCards>
+       </Container>
+
+      </FoodCardContainer>
+      
+    </div>
+  )
+}
+
+export default SearchResult
+
+
+const FoodCardContainer= styled.section`
+height: calc(100vh - 220px);
+background-image: url(./bg.png);
+background-size: cover;
+
+  
+
+`
+
+const FoodCards= styled.div`
+display: flex;
+flex-wrap: wrap;
+row-gap: 32px;
+column-gap: 20px;
+justify-content: center;
+align-items: center;
+padding-top:30px ;
+  
+`
+
+
+const FoodCard= styled.div`
+
+width: 340px;
   height: 167px;
   border: 0.66px solid;
+
+
+
 
   border-image-source: radial-gradient(
       80.69% 208.78% at 108.28% 112.58%,
@@ -67,15 +96,17 @@ const FoodCard = styled.div`
   backdrop-filter: blur(13.1842px);
 
   border-radius: 20px;
-
   display: flex;
-  padding: 8px;
+  padding: 5px;
 
-  .food_info {
+
+  .food_info{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: end;
+
+
     h3 {
       margin-top: 8px;
       font-size: 16px;
@@ -89,4 +120,11 @@ const FoodCard = styled.div`
       font-size: 12px;
     }
   }
-`;
+    
+
+ 
+  
+  
+
+`
+
